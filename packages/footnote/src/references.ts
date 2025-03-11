@@ -44,6 +44,7 @@ export function createFootnoteRef(prefixId: string, refMarkers = false, useLabel
 
         return ref
       }
+      return undefined;
     },
     renderer({ id, label }: FootnoteRef) {
       order = 0 // reset order

@@ -26,7 +26,7 @@ export default function markedFootnote(options: Options = {}): MarkedExtension {
       if (
         token.type === 'footnotes' &&
         lexer.tokens.indexOf(token) === 0 &&
-        token.items.length
+        token['items'].length
       ) {
         lexer.tokens[0] = { type: 'space', raw: '' }
         lexer.tokens.push(token)

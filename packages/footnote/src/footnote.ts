@@ -60,6 +60,7 @@ export function createFootnote(lexer: LexerTokens, description: string) {
 
         return token
       }
+      return undefined;
     },
     renderer() {
       // skip it for now!
