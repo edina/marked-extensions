@@ -25,6 +25,14 @@ export interface Options {
    * @default false
    */
   refMarkers?: boolean
+
+  /**
+    * Use the original labels for footnotes rather than ordering them always
+    * from 1.
+    *
+    * @default false
+    */
+  useLabels?: boolean
 }
 
 /**

@@ -4,7 +4,7 @@ import type { FootnoteRef, Footnotes } from './types.js'
 /**
  * Returns an extension object for parsing inline footnote references.
  */
-export function createFootnoteRef(prefixId: string, refMarkers = false) {
+export function createFootnoteRef(prefixId: string, refMarkers = false, useLabels: boolean) {
   let order = 0
 
   return {
@@ -48,11 +48,12 @@ export function createFootnoteRef(prefixId: string, refMarkers = false) {
     renderer({ id, label }: FootnoteRef) {
       order = 0 // reset order
       const encodedLabel = encodeURIComponent(label)
+      const text = useLabels ? label : id;
 
       return `<sup><a id="${prefixId}ref-${encodedLabel}" href="#${
         prefixId + encodedLabel
       }" data-${prefixId}ref aria-describedby="${prefixId}label">${
-        refMarkers ? `[${id}]` : id
+        refMarkers ? `[${text}]` : text
       }</a></sup>`
     }
   } as TokenizerAndRendererExtension

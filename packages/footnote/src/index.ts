@@ -11,15 +11,16 @@ export default function markedFootnote(options: Options = {}): MarkedExtension {
   const {
     prefixId = 'footnote-',
     description = 'Footnotes',
-    refMarkers
+    refMarkers,
+    useLabels = false,
   } = options
   const lexer: LexerTokens = { hasFootnotes: false, tokens: [] }
 
   return {
     extensions: [
       createFootnote(lexer, description),
-      createFootnoteRef(prefixId, refMarkers),
-      createFootnotes(prefixId)
+      createFootnoteRef(prefixId, refMarkers, useLabels),
+      createFootnotes(prefixId, useLabels)
     ],
     walkTokens(token) {
       if (

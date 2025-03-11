@@ -4,11 +4,13 @@ import type { Footnotes } from './types.js'
 /**
  * Returns an extension object for rendering the list of footnotes.
  */
-export function createFootnotes(prefixId: string) {
+export function createFootnotes(prefixId: string, useLabels: boolean) {
   return {
     name: 'footnotes',
     renderer(this: RendererThis, { raw, items = [] }: Footnotes) {
       if (items.length === 0) return ''
+
+      let startIndex: string = '';
 
       const footnotesItemsHTML = items.reduce(
         (acc, { label, content, refs }) => {
@@ -22,9 +24,10 @@ export function createFootnotes(prefixId: string) {
             : parsedContent
 
           refs.forEach((_, i) => {
-            footnoteItem += ` <a href="#${prefixId}ref-${encodedLabel}" data-${prefixId}backref aria-label="Back to reference ${label}">${
-              i > 0 ? `↩<sup>${i + 1}</sup>` : '↩'
-            }</a>`
+            if (!startIndex) startIndex = label;
+            const labelText = useLabels ? label : (i + 1);
+            const linkText = i > 0 ? `↩<sup>${labelText}</sup>` : '↩';
+            footnoteItem += ` <a href="#${prefixId}ref-${encodedLabel}" data-${prefixId}backref aria-label="Back to reference ${label}">${linkText}</a>`
           })
 
           footnoteItem += isEndsWithP ? '</p>\n' : '\n'
@@ -35,9 +38,10 @@ export function createFootnotes(prefixId: string) {
         ''
       )
 
+      const olStart = useLabels ? `start="${startIndex}"` : '';
       let footnotesHTML = '<section class="footnotes" data-footnotes>\n'
       footnotesHTML += `<h2 id="${prefixId}label" class="sr-only">${raw.trimEnd()}</h2>\n`
-      footnotesHTML += `<ol>\n${footnotesItemsHTML}</ol>\n`
+      footnotesHTML += `<ol ${olStart}>\n${footnotesItemsHTML}</ol>\n`
       footnotesHTML += '</section>\n'
 
       return footnotesHTML
